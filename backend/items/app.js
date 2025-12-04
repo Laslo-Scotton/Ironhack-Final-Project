@@ -24,6 +24,10 @@ require("./config")(app);
 require('./metrics.cjs');
 client.collectDefaultMetrics();
 
+app.get("/healthz", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
 app.get("/api/items", (req, res, next) => {
     res.json("Items Server UP!");
 });

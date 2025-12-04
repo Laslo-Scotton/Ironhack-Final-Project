@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: scolas3/frontend-finalp:1.0
+        image: scolas3/frontend:1.0
         ports:
         - containerPort: 80
         readinessProbe:
