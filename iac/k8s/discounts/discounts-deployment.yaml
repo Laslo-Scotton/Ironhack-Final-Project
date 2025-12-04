@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: discounts
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: discounts
+  template:
+    metadata:
+      labels:
+        app: discounts
+    spec:
+      containers:
+      - name: discounts
+        image: scolas3/discounts:1.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3002
+        env:
+        - name: PORT
+          value: "3002"
+        - name: SECRET
+          valueFrom:
+            secretKeyRef:
+              name: general-secrets
+              key: secret
+        - name: MONGODB_URI
+          valueFrom:
+            secretKeyRef:
+              name: general-secrets
+              key: mongodb_uri
+        - name: CLOUD_NAME
+          valueFrom:
+            secretKeyRef:
+              name: general-secrets
+              key: cloud_name
+        - name: CLOUD_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: general-secrets
+              key: cloud_api_key
+        - name: CLOUD_API_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: general-secrets
+              key: cloud_api_secret
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 3002
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 3002
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"

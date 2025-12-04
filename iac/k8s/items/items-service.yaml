@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: items-service
+spec:
+  selector:
+    app: items
+  ports:
+    - port: 3003
+      targetPort: 3003
